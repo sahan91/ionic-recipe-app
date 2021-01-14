@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 
 import { Recipe } from "./recipe.model";
 
@@ -23,9 +24,24 @@ export class RecipesPage implements OnInit {
 				"https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/001_Tacos_de_carnitas%2C_carne_asada_y_al_pastor.jpg/1920px-001_Tacos_de_carnitas%2C_carne_asada_y_al_pastor.jpg",
 			ingredients: ["Wrap", "Tomato", "Coriander"],
 		},
-	];
+  ];
+  
+  currentLocation: String = "";
 
-	constructor() {}
+	constructor(private geolocation: Geolocation) {}
 
-	ngOnInit() {}
+  ngOnInit() {}
+  
+  getLocation() {
+    let location = this.geolocation.getCurrentPosition();
+    location
+		.then((resp) => {
+			// resp.coords.latitude
+      // resp.coords.longitude
+      this.currentLocation = `${resp.coords.latitude} ${resp.coords.longitude}`;
+		})
+		.catch((error) => {
+			console.log("Error getting location", error);
+		});
+  }
 }
